@@ -1,6 +1,5 @@
 <launch>
-
-    <!-- <node pkg="joy" type="joy_node" name="joystick_driver" /> -->
+    <node pkg="joy" type="joy_node" name="joystick_driver" />
     
     <node pkg="joy_teleop_agv" type="joy_teleop_node.py" name="joy_teleop_node" output="screen">
         
