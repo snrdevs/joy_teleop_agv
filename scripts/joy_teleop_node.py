@@ -61,7 +61,9 @@ class JoyTeleop():
 
         self.main() 
         
-    def joy_sub(self,data): 
+    def joy_sub(self,data):
+        asd = Joy() 
+        
         self.analog_left_horizontal         = data.axes[0]
         self.analog_left_vertical           = data.axes[1]
 
@@ -82,22 +84,20 @@ class JoyTeleop():
         self.lb     = data.buttons[4] 
         self.lt     = data.buttons[6]
 
-    def emergency_stop(self): 
-        if self.btn_b == 1: 
-            self.twist_command.linear.x     = 0 
-            self.twist_command.angular.z    = 0  
-            return True
-
     def main(self):
-        while (not(rospy.is_shutdown()) and rosgraph.is_master_online() and not(self.emergency_stop())): 
-            linear_x_com    = round(self.analog_left_vertical * self.agv_max_lin_vel,3) 
-            angular_z_com   = round(self.analog_right_horizontal * self.agv_max_ang_vel,3)  
+        while (not(rospy.is_shutdown()) and rosgraph.is_master_online()): 
+            if self.btn_b == 1: 
+                self.twist_command.linear.x = 0
+                self.twist_command.angular.z = 0 
+                self.twist_pubber.publish(self.twist_command) 
+            elif self.btn_b == 0: 
+                linear_x_com    = round(self.analog_left_vertical * self.agv_max_lin_vel,3) 
+                angular_z_com   = round(self.analog_right_horizontal * self.agv_max_ang_vel,3)  
 
-            self.twist_command.linear.x = linear_x_com 
-            self.twist_command.angular.z = angular_z_com 
-
-            self.twist_pubber.publish(self.twist_command) 
-
+                self.twist_command.linear.x = linear_x_com 
+                self.twist_command.angular.z = angular_z_com 
+                self.twist_pubber.publish(self.twist_command) 
+            
             self.frequency.sleep() 
 
 if __name__ == "__main__":

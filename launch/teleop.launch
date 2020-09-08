@@ -1,8 +1,8 @@
 <launch>
 
-    <node pkg="joy" type="joy_node" name="joystick_driver" />
+    <!-- <node pkg="joy" type="joy_node" name="joystick_driver" /> -->
     
-    <node pkg="joy_teleop_agv" type="joy_teleop_node.py" name="joy_teleop_node">
+    <node pkg="joy_teleop_agv" type="joy_teleop_node.py" name="joy_teleop_node" output="screen">
         
         <param name="joystick_port" value="js0"/>
         
