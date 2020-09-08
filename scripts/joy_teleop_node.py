@@ -82,8 +82,14 @@ class JoyTeleop():
         self.lb     = data.buttons[4] 
         self.lt     = data.buttons[6]
 
+    def emergency_stop(self): 
+        if self.btn_b == 1: 
+            self.twist_command.linear.x     = 0 
+            self.twist_command.angular.z    = 0  
+            return True
+
     def main(self):
-        while (not(rospy.is_shutdown()) and rosgraph.is_master_online()): 
+        while (not(rospy.is_shutdown()) and rosgraph.is_master_online() and not(self.emergency_stop())): 
             linear_x_com    = round(self.analog_left_vertical * self.agv_max_lin_vel,3) 
             angular_z_com   = round(self.analog_right_horizontal * self.agv_max_ang_vel,3)  
 
